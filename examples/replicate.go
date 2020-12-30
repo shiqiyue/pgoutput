@@ -11,7 +11,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	config := pgx.ConnConfig{Database: "opsdash", User: "replicant"}
+	config := pgx.ConnConfig{Database: "testsub", User: "postgres", Password: "root"}
 	conn, err := pgx.ReplicationConnect(config)
 	if err != nil {
 		log.Fatal(err)
@@ -49,7 +49,7 @@ func main() {
 		return nil
 	}
 
-	sub := pgoutput.NewSubscription(conn, "sub1", "pub1", 0, false)
+	sub := pgoutput.NewSubscription(conn, "sub1", "pub43", 0, false)
 	if err := sub.Start(ctx, 0, handler); err != nil {
 		log.Fatal(err)
 	}
