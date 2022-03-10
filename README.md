@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx"
-	"github.com/kyleconroy/pgoutput"
+	"github.com/shiqiyue/pgoutput"
 )
 
 func main() {
