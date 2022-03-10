@@ -51,6 +51,24 @@ func (rs *RelationSet) Values(id uint32, row []Tuple) (map[string]pgtype.Value, 
 	return values, nil
 }
 
+func (rs *RelationSet) Value(id uint32, row []Tuple, valueName string) (pgtype.Value, error) {
+	rel, ok := rs.Get(id)
+	if !ok {
+		return nil, fmt.Errorf("no relation for %d", id)
+	}
+	for i, tuple := range row {
+		col := rel.Columns[i]
+		if col.Name == valueName {
+			decoder := col.Decoder()
+			if err := decoder.DecodeText(rs.connInfo, tuple.Value); err != nil {
+				return nil, fmt.Errorf("error decoding tuple %d: %s", i, err)
+			}
+			return decoder, nil
+		}
+	}
+	return nil, fmt.Errorf("no value %s found for %d", valueName, id)
+}
+
 func (c Column) Decoder() DecoderValue {
 	switch c.Type {
 	case pgtype.ACLItemArrayOID:
